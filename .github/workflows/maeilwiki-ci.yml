@@ -1,0 +1,50 @@
+name: MAEIL-WIKI CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID }}
+      NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_GITHUB_OAUTH_REDIRECT_URI }}
+      NEXT_PUBLIC_MAEIL_WIKI_ERROR_PAGE_URL: ${{ secrets.NEXT_PUBLIC_MAEIL_WIKI_ERROR_PAGE_URL }}
+      NEXT_PUBLIC_MAEIL_MAIL_GA_ID: ${{ secrets.NEXT_PUBLIC_MAEIL_MAIL_GA_ID }}
+      NEXT_PUBLIC_MAEIL_WIKI_GA_ID: ${{ secrets.NEXT_PUBLIC_MAEIL_WIKI_GA_ID }}
+      OAUTH_GITHUB_CLIENT_SECRET: ${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}
+      ADMIN_AUTH_SECRET_KEY: ${{ secrets.ADMIN_AUTH_SECRET_KEY }}
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TURBO_CACHE: remote:rw
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.1'
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Install Turborepo CLI
+        run: npm install --global turbo
+
+      - name: Enable and set pnpm version
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.5.0 --activate
+
+      - name: Vercel link
+        run: vercel link --yes --token=${{ secrets.TURBO_TOKEN }} --project=${{ secrets.VERCEL_PROJECT_NAME_WIKI }}
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.TURBO_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.TURBO_TOKEN }}
