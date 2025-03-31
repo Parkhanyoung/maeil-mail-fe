@@ -27,7 +27,7 @@ export function Footer({ serviceName, introduceUrl, feedbackUrl }: FooterProps) 
             <span>서비스 피드백하기</span>
           </a>
           <a className={externalLink} href={GITHUB_ORGANIZATION_URL} rel="noopener noreferrer">
-            <span>Github 스타는 서비스 운영에 큰 도움이 됩니다!</span>
+            <span>Github 스타는 서비스 운영에 큰 도움이 됩니다</span>
           </a>
         </section>
       </div>
