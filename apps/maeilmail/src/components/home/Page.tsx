@@ -1,7 +1,6 @@
 'use client';
 
 import SubscribeModal from './SubscribeModal';
-import ServiceEndingNoticeModal from './ServiceEndingNoticeModal';
 import HomeNav from './HomeNav';
 import HeroSection from './HeroSection';
 import DescriptionSection from './DescriptionSection';
@@ -33,7 +32,6 @@ export default function HomePage({ subscriberCount }: HomePageProps) {
         <ClosingCTA onCTA={openModal} subscriberCount={subscriberCount} />
         <FAQSection />
       </div>
-      <ServiceEndingNoticeModal />
       <SubscribeModal isOpen={isModalOpen} closeModal={closeModal} />
     </div>
   );
